@@ -43,7 +43,7 @@ jobs:
       shell: powershell
       run: |
         # Build the container tagged with the repository name
-        docker build -t ${{ env.TAG }} .
+        docker build -t ${{ env.TAG }} -f Dockerfile.windows .
         
         # Push the image to Docker Hub
         docker push ${{ env.TAG }}
