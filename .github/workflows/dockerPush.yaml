@@ -43,6 +43,10 @@ jobs:
         
         # Push the image to Docker Hub
         docker push ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
+
+        # Create a multi-platform manifest that includes both the Linux and Windows images
+        docker buildx imagetools create --append -t ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest-windows
+        
     # - name: Build and push Docker image
     #   uses: docker/build-push-action@v7.2.0
     #   with:
