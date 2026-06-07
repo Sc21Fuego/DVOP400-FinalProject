@@ -1,17 +1,17 @@
 # Use the official Microsoft Windows Server Core image
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM mcr.microsoft.com/windows-cssc/python:3.13-nanoserver-ltsc2025
 
 # Set PowerShell as the default shell for configuration
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-# Download and install Python natively inside the Windows container
-RUN Invoke-WebRequest -Uri https://python.org -OutFile python-installer.exe; \
-    Start-Process python-installer.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait; \
-    Remove-Item python-installer.exe
+# # Download and install Python natively inside the Windows container
+# RUN Invoke-WebRequest -Uri https://python.org -OutFile python-installer.exe; \
+#     Start-Process python-installer.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait; \
+#     Remove-Item python-installer.exe
 
-# Verify installation and upgrade pip
-RUN python --version; \
-    python -m pip install --upgrade pip
+# # Verify installation and upgrade pip
+# RUN python --version; \
+#     python -m pip install --upgrade pip
 
 # Set the working directory
 # WORKDIR C:/inetpub/wwwroot
@@ -24,7 +24,7 @@ WORKDIR C:/app
 COPY . .
 
 # Define the command to run your Python script
-CMD ["python", "server.py"]
+CMD ["python3", "server.py"]
 
 # Document the intended port for the application
 EXPOSE 80
