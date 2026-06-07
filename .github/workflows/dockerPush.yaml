@@ -41,4 +41,4 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
     - name: Merge Manifests
       run: |
-        docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:linux-latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
+        docker buildx imagetools create --tag ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:linux-latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
