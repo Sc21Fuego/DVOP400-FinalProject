@@ -39,6 +39,20 @@ jobs:
         
         # Push the image to Docker Hub
         docker push ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
+    - name: Install Docker Buildx on Windows Runner
+      shell: powershell
+      run: |
+        # 1. Create the official Docker CLI plugins directory
+        $pluginDir = "$env:ProgramFiles\Docker\cli-plugins"
+        if (!(Test-Path $pluginDir)) { 
+            New-Item -ItemType Directory -Force -Path $pluginDir 
+        }
+        
+        # 2. Download the latest stable Buildx binary for Windows
+        Invoke-WebRequest -Uri "https://github.com" -OutFile "$pluginDir\docker-buildx.exe"
+        
+        # 3. Verify that Docker now recognizes the buildx command
+        docker buildx version
     - name: Merge Manifests
       run: |
         docker buildx imagetools create ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:linux-latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
