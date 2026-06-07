@@ -1,0 +1,47 @@
+name: Docker Image Push
+on:
+  push:
+    branches:
+    - main
+    - develop
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  TAG: $DOCKER_USERNAME/DVOP400-final:latest
+jobs:
+  linuxbuild:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+    - name: Build Docker Image
+      run: docker image build . --tag docker.io/$DOCKER_USERNAME/dvop400final:latest
+    - name: Log in to Docker Hub
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v7.2.0
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: $DOCKER_USERNAME/dvop400final:latest
+  windowsbuild:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Build Docker Image
+      run: docker image build . --tag docker.io/$DOCKER_USERNAME/dvop400final:latest
+    - name: Log in to Docker Hub
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v7.2.0
+      with:
+        context: .
+        platforms: windows/amd64,windows/arm64
+        push: true
+        tags: $DOCKER_USERNAME/dvop400final:latest
