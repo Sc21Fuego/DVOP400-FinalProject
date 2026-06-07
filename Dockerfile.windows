@@ -1,5 +1,5 @@
 # Use the official Microsoft Windows Server Core image
-FROM mcr.microsoft.com/windows/servercore/iis:ltsc2022
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2022
 
 # Set PowerShell as the default shell for configuration
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
@@ -14,10 +14,11 @@ RUN python --version; \
     python -m pip install --upgrade pip
 
 # Set the working directory
-WORKDIR C:/inetpub/wwwroot
+# WORKDIR C:/inetpub/wwwroot
+WORKDIR C:/app
 
 # Clear the IIS root directory to prepare for the application files
-RUN Remove-Item -Recurse -Force C:\inetpub\wwwroot\*
+# RUN Remove-Item -Recurse -Force C:\inetpub\wwwroot\*
 
 # Copy the application code
 COPY . .
