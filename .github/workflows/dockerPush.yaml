@@ -1,9 +1,5 @@
 name: Docker Image Push
-on:
-  push:
-    branches:
-    - main
-    - develop
+on: push
 jobs:
   linuxbuild:
     runs-on: ubuntu-latest
