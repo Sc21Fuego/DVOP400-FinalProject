@@ -39,16 +39,6 @@ jobs:
         
         # Push the image to Docker Hub
         docker push ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
-
-        # Create a multi-platform manifest that includes both the Linux and Windows images
-        docker manifest create ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:linux-latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
-        docker manifest push ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest
-        
-    # - name: Build and push Docker image
-    #   uses: docker/build-push-action@v7.2.0
-    #   with:
-    #     context: .
-    #     file: Dockerfile.windows
-    #     platforms: windows/amd64
-    #     push: true
-    #     tags: ${{ env.TAG }}
+    - name: Merge Manifests
+      run: |
+        docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/dvop400final:latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:linux-latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
