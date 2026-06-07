@@ -1,9 +1,5 @@
 name: Docker Image Push
-on:
-  push:
-    branches:
-    - main
-    - develop
+on: push
 jobs:
   linuxbuild:
     runs-on: ubuntu-latest
@@ -43,15 +39,20 @@ jobs:
         
         # Push the image to Docker Hub
         docker push ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
-
-        # Create a multi-platform manifest that includes both the Linux and Windows images
-        docker buildx imagetools create -t ${{ secrets.DOCKER_USERNAME }}/dvop400final:linux-latest ${{ secrets.DOCKER_USERNAME }}/dvop400final:windows-latest
-        
-    # - name: Build and push Docker image
-    #   uses: docker/build-push-action@v7.2.0
-    #   with:
-    #     context: .
-    #     file: Dockerfile.windows
-    #     platforms: windows/amd64
-    #     push: true
-    #     tags: ${{ env.TAG }}
+  mergebuilds:
+    needs: [linuxbuild, windowsbuild]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Create and push multi-arch manifest
+      run: |
+        docker buildx imagetools create -t fuegoisfire/dvop400final:latest \
+            fuegoisfire/dvop400final:linux-latest \
+            fuegoisfire/dvop400final:windows-latest
+    - name: Verify Final Manifest
+      run: |
+        docker buildx imagetools inspect fuegoisfire/dvop400final:latest
