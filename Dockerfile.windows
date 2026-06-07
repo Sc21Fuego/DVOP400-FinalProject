@@ -1,5 +1,5 @@
 # Use the official Microsoft Windows Server Core image
-FROM mcr.microsoft.com/windows/nanoserver:ltsc2022
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 # Set PowerShell as the default shell for configuration
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
@@ -24,7 +24,7 @@ WORKDIR C:/app
 COPY . .
 
 # Define the command to run your Python script
-CMD ["python", "drtbrt.py"]
+CMD ["python", "server.py"]
 
 # Document the intended port for the application
 EXPOSE 80
